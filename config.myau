@@ -47,7 +47,6 @@ open_square_bracket_colon,  close_square_bracket_colon,
 open_figure_bracket,        close_figure_bracket,
 open_round_bracket,         close_round_bracket,
 open_round_bracket_colon,   close_round_bracket_colon,
-
 scope_resolution,
 question_mark,
 logical_not,    
@@ -60,16 +59,16 @@ not,
 or,     not_or, 
 xor,    not_xor,
 and,    not_and,
-lshift, rshift,
-
+lshift, rshift, rshift_int,
 plus,           minus,      
-multiplication, division,   
+multiplication, division, fract_division,
 mod,
-
+exponentiation, fract_exponentiation,
+sizeof,
+index,
 comma,
 assignment,
 structure_dereference
-
 
 
 %impl_additions "
@@ -147,16 +146,16 @@ return num;}"
 "^" : xor,      "~^" : not_xor,
 "&" : and,      "~&" : not_and,
 "<<" : lshift,  ">>" : rshift,
-">>>" : ,
+">>>" : rshift_int,
 "+" : plus,     "-" : minus,
 "*" : multiplication,
 "/" : division,
 "%" : mod,
-"/." : ,
-"**" : ,
-"**." : ,
-"#" : ,
-"##" : ,
+"/." : fract_division,
+"**" : exponentiation,
+"**." : fract_exponentiation,
+"#" : sizeof,
+"##" : index,
 "," : comma,
 ":=" : assignment,
 "->" : structure_dereference 
