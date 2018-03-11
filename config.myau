@@ -1,9 +1,7 @@
-%scaner_name myfirstscaner  
-
+%scaner_name tscaner
 %codes_type codes  
 
 %ident_name Id
-
 %idents {[:Letter:]|[:letter:]|_}{[:Letter:]|[:letter:]|_|[:digits:]}
 
 %class_members
@@ -17,8 +15,62 @@ char32_t precision;
 char32_t char32_code;
 __float128 build_float();"
 
+
 %token_fields
 "unsigned __int128 int_val; __float128 float_val;"
+
+
+%codes
+module,
+import,     export,
+var,        type,       array,
+long,       short,
+int,        float,      uint,       bool,       char,       string,
+void,       byte,
+int8_t,     int16_t,    int32_t,    int64_t,    int128_t,
+uint8_t,    uint16_t,   uint32_t,   uint64_t,   uint128_t,
+float32_t,  float64_t,  float128_t,
+bool8_t,    bool16_t,   bool32_t,   bool64_t,
+char8_t,    char16_t,   char32_t,   string8_t,  string16_t, string32_t,
+fn,         val,        ref,        const ref,  enum,
+struct,
+const,
+true,       false,
+if,         then,       elif,       else,       endif,
+for,        while,      repeat,     until,      
+break,      continue,   return,
+read,       print,      match,
+semicolon,  colon,
+equal,      not_equal,
+open_square_bracket,        close_square_bracket,
+open_square_bracket_colon,  close_square_bracket_colon,
+open_figure_bracket,        close_figure_bracket,
+open_round_bracket,         close_round_bracket,
+open_round_bracket_colon,   close_round_bracket_colon,
+
+scope_resolution,
+question_mark,
+logical_not,    
+logical_or,     not_logical_or,
+logical_xor,    not_logical_xor,
+logical_and,    not_logical_and,
+less,           greater,    
+less_or_equal,  greater_or_equal,
+not,
+or,     not_or, 
+xor,    not_xor,
+and,    not_and,
+lshift, rshift,
+
+plus,           minus,      
+multiplication, division,   
+mod,
+
+comma,
+assignment,
+structure_dereference
+
+
 
 %impl_additions "
 #include <quadmath> 
@@ -33,6 +85,81 @@ __float128 num;
 num = int_value + fract_part*powq(10, num_of_digits);
 num = num*powq(10, sign_of_degree*exponent);
 return num;}"
+
+
+%keywords
+"module" : module,
+"import" : import,      "export" : export,
+"var" : var,
+"type" : type,
+"array" : array,
+"long" : long,              "short" : short,
+"int" : int,                "float" : float,            "uint" : uint,
+"bool" : bool,              "char" : char,              "string" : string,
+"void" : void,              "byte" : byte,
+"int8_t" : int8_t,          "int16_t" : int16_t,        "int32_t" : int32_t,
+"int64_t" : int64_t,        "int128_t" : int128_t,
+"uint8_t" : uint8_t,        "uint16_t" : uint16_t,      "uint32_t" : uint32_t,
+"uint64_t" : uint64_t,      "uint128_t" : uint128_t,
+"float32_t" : float32_t,    "float64_t" : float64_t,
+"float128_t" : float128_t,  
+"bool8_t" : bool8_t,        "bool16_t" : bool16_t,  
+"bool32_t" : bool32_t,      "bool64_t" : bool64_t,
+"char8_t" : char8_t,        "char16_t" : char16_t,      "char32_t" : char32_t,
+"string8_t" : string8_t,    "string16_t" : string16_t,  "string32_t" : string32_t,
+"fn" : fn,
+"val" : val,
+"ref" : ref,
+"const ref" : const ref,
+"enum" : enum,
+"struct" : struct,
+"const" : const,
+"true" : true,              "false" : false,
+"if" : if,                  "then" : then,
+"elif" : elif,              "else" : else,
+"endif" : endif,
+"for" : for,                "while" : while,
+"repeat" : repeat,          "until" : until,
+"break" : break,            "continue" : continue,
+"return" : return,
+"read" : read,              "print" : print,
+"match" : match
+
+
+%delimiters
+";" : semicolon,                    ":" : colon,   
+"=" : equal,                        "!=" : not_equal,
+"[" : open_square_bracket,          "]" : close_square_bracket,
+"[:" : open_square_bracket_colon,   ":]" : close_square_bracket_colon,
+"{" : open_figure_bracket,          "}": close_figure_bracket,
+"(" : open_round_bracket,           ")": close_round_bracket,
+"(:" : open_round_bracket_colon,    ":)" : close_round_bracket_colon,
+"::" : scope_resolution,
+"?" : question_mark,
+"!" : logical_not,
+"||" : logical_or,          "!||" : not_logical_or,
+"^^" : logical_xor,         "!^^" : not_logical_xor,
+"&&" : logical_and,         "!&&" : not_logical_and,
+"<" : less,                 ">" : greater,
+"<=" : less_or_equal,       ">=" : greater_or_equal,
+"~" : not,
+"|" : or,       "~|" : not_or,
+"^" : xor,      "~^" : not_xor,
+"&" : and,      "~&" : not_and,
+"<<" : lshift,  ">>" : rshift,
+">>>" : ,
+"+" : plus,     "-" : minus,
+"*" : multiplication,
+"/" : division,
+"%" : mod,
+"/." : ,
+"**" : ,
+"**." : ,
+"#" : ,
+"##" : ,
+"," : comma,
+":=" : assignment,
+"->" : structure_dereference 
 
 
 
