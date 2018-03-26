@@ -40,35 +40,36 @@ if,         then,       elif,       else,       endif,
 for,        while,      repeat,     until,      
 break,      continue,   return,
 read,       print,      match,
-semicolon,  colon,
-equal,      not_equal,
-open_square_bracket,        close_square_bracket,
-open_square_bracket_colon,  close_square_bracket_colon,
-open_figure_bracket,        close_figure_bracket,
-open_round_bracket,         close_round_bracket,
-open_round_bracket_colon,   close_round_bracket_colon,
-scope_resolution,
-question_mark,
-logical_not,    
-logical_or,     not_logical_or,
-logical_xor,    not_logical_xor,
-logical_and,    not_logical_and,
-less,           greater,    
-less_or_equal,  greater_or_equal,
-not,
-or,     not_or, 
-xor,    not_xor,
-and,    not_and,
-lshift, rshift, rshift_int,
-plus,           minus,      
-multiplication, division, fract_division,
-mod,
-exponentiation, fract_exponentiation,
-sizeof,
-index,
-comma,
-assignment,
-structure_dereference
+
+Comma,                  Semicolon,             
+Colon,                  Dot,                
+Open_round_bracket,     Closed_round_bracket,
+Open_square_bracket,    Closed_square_bracket, 
+Equal_sign,             At_sign,             
+Tuple_begin,            Tuple_end,
+Variant_delimiter,      Conditional_op,        
+Logical_or,             Logical_or_not,      
+Logical_xor,            Logical_xor_not,
+Logical_and,            Logical_and_not,
+Logical_not,            Less_than,
+Greater_than,           Lower_or_equals,
+Greater_or_equals,      Not_equals,
+Bitwise_xor,            Bitwise_or,
+Bitwise_xor_not,        Bitwise_or_not,
+Open_curly_bracket,     Closed_curly_bracket,
+Bitwise_and,            Bitwise_and_not,
+Left_shift,             Right_shift,
+Signed_right_shift,     Bitwise_not,
+Plus,                   Minus,
+Mul,                    Div,
+Fdiv,                   Mod,
+Power,                  Fpower,
+Sizeof,                 Dimension_size,
+Allocated_array_open,   Allocated_array_close,
+ Module_name_prefix,    Scope_resolution,
+Assign_to_field,        Label_prefix,
+Label_suffix,           Assign,
+Pattern_is,             Br_dots
 
 
 %impl_additions "
@@ -126,40 +127,73 @@ return num;}"
 
 
 %delimiters
-";" : semicolon,                    ":" : colon,   
-"=" : equal,                        "!=" : not_equal,
-"[" : open_square_bracket,          "]" : close_square_bracket,
-"[:" : open_square_bracket_colon,   ":]" : close_square_bracket_colon,
-"{" : open_figure_bracket,          "}": close_figure_bracket,
-"(" : open_round_bracket,           ")": close_round_bracket,
-"(:" : open_round_bracket_colon,    ":)" : close_round_bracket_colon,
-"::" : scope_resolution,
-"?" : question_mark,
-"!" : logical_not,
-"||" : logical_or,          "!||" : not_logical_or,
-"^^" : logical_xor,         "!^^" : not_logical_xor,
-"&&" : logical_and,         "!&&" : not_logical_and,
-"<" : less,                 ">" : greater,
-"<=" : less_or_equal,       ">=" : greater_or_equal,
-"~" : not,
-"|" : or,       "~|" : not_or,
-"^" : xor,      "~^" : not_xor,
-"&" : and,      "~&" : not_and,
-"<<" : lshift,  ">>" : rshift,
-">>>" : rshift_int,
-"+" : plus,     "-" : minus,
-"*" : multiplication,
-"/" : division,
-"%" : mod,
-"/." : fract_division,
-"**" : exponentiation,
-"**." : fract_exponentiation,
-"#" : sizeof,
-"##" : index,
-"," : comma,
-":=" : assignment,
-"->" : structure_dereference 
+","     : Comma,                ";"     : Semicolon,             
+":"     : Colon,                "."     : Dot,                
+"("     : Open_round_bracket,   ")"     : Closed_round_bracket,
+"["     : Open_square_bracket,  "]"     : Closed_square_bracket, 
+"="     : Equal_sign,           "@"     : At_sign,             
+"(:"    : Tuple_begin,          ":)"    : Tuple_end,
+".|."   : Variant_delimiter,    "?"     : Conditional_op,        
+"||"    : Logical_or,           "!||"   : Logical_or_not,      
+"^^"    : Logical_xor,          "!^^"   : Logical_xor_not,
+"&&"    : Logical_and,          "!&&"   : Logical_and_not,
+"!"     : Logical_not,          "<"     : Less_than,
+">"     : Greater_than,         "<="    : Lower_or_equals,
+">="    : Greater_or_equals,    "!="    : Not_equals,
+"^"     : Bitwise_xor,          "|"     : Bitwise_or,
+"~^"    : Bitwise_xor_not,      "~|"    : Bitwise_or_not,
+"{"     : Open_curly_bracket,   "}"     : Closed_curly_bracket,
+"&"     : Bitwise_and,          "~&"    : Bitwise_and_not,
+"<<"    : Left_shift,           ">>"    : Right_shift,
+">>>"   : Signed_right_shift,   "~"     : Bitwise_not,
+"+"     : Plus,                 "-"     : Minus,
+"*"     : Mul,                  "/"     : Div,
+"/."    : Fdiv,                 "%"     : Mod,
+"**"    : Power,                "**."   : Fpower,
+"#"     : Sizeof,               "##"    : Dimension_size,
+"[:"    : Allocated_array_open, ":]"    : Allocated_array_close,
+"|:"    : Module_name_prefix,   "::"    : Scope_resolution,
+"<-"    : Assign_to_field,      "<:"    : Label_prefix,
+":>"    : Label_suffix,         ":="    : Assign,
+"->"    : Pattern_is,
+"{..}"  : Br_dots
 
+
+%impl_additions "
+  #include <quadmath>
+
+  size_t digit2int(char32_t ch) {
+    size_t v = ch - U'0';
+    return (v<=9)? v : (v&0b1101'1111) - 7;
+  }
+  __int128 setexp(char32_t ch) {
+    return (ch == '-')? -1 : 1;
+  }
+
+  __float128 Scaner::build_float(){
+    return integer_part + fractional_part*powq(10,-frac_part_num_digits)+exp_sign*exponent;
+  }
+
+  Lexem_code precision2code(char32_t ch){
+    switch (ch) {
+      case U'S': case U's':
+        return Float32;
+        break;
+      case U'D': case U'd':
+        return Float64;
+        break;
+      case U'E': case U'e':
+        return Float80;
+        break;
+      case U'Q': case U'q':
+        return Float128;
+        break;
+      default:
+        return Float32;
+        break;
+    }
+  }
+"
 
 
 %strings "buffer.clear();":"token.code=(buffer.length()==1)?Char:String;"
@@ -169,7 +203,6 @@ return num;}"
 %action add_oct_digit_to_char_code "char_code = char_code * 8 + digit2int(ch);"
 %action add_bin_digit_to_char_code "char_code = char_code * 2 + digit2int(ch);"
 %action add_hex_digit_to_char_code "char_code = char_code * 16 + digit2int(ch);"
-
 {
 (\$([:digits:]$add_dec_digit_to_char_code('?[:digits:]$add_dec_digit_to_char_code)*|
    0o[:odigits:]$add_oct_digit_to_char_code('?[:odigits:]$add_oct_digit_to_char_code)*|
@@ -179,7 +212,6 @@ return num;}"
    0o[:odigits:]$add_oct_digit_to_char_code('?[:odigits:]$add_oct_digit_to_char_code)*|
 0(b|B)[:bdigits:]$add_bin_digit_to_char_code('?[:bdigits:]$add_bin_digit_to_char_code)*|
 0(x|X)[:xdigits:]$add_hex_digit_to_char_code('?[:xdigits:]$add_hex_digit_to_char_code)*)$write_by_code)+)*
-
 } 
 
 
