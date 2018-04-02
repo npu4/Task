@@ -1,8 +1,11 @@
-%scaner_name tscaner
-%codes_type codes  
+%scaner_name Scaner
+%codes_type Lexem_code
 
-%ident_name Id
-%idents {[:Letter:]|[:letter:]|_}{[:Letter:]|[:letter:]|_|[:digits:]}
+%ident_name Ident
+
+%token_fields
+"unsigned __int128 int_val;
+__float128 float_val;"
 
 %class_members
 "__int128 integer_part;
@@ -12,35 +15,35 @@ ssize_t exp_sign;
 size_t frac_part_num_digits;
 bool is_float;
 char32_t precision;
-char32_t char32_code;
-__float128 build_float();"
+char32_t char_code;"
 
-
-%token_fields
-"unsigned __int128 int_val; __float128 float_val;"
-
-
-%codes
-module,
-import,     export,
-var,        type,       array,
-long,       short,
-int,        float,      uint,       bool,       char,       string,
-void,       byte,
-int8_t,     int16_t,    int32_t,    int64_t,    int128_t,
-uint8_t,    uint16_t,   uint32_t,   uint64_t,   uint128_t,
-float32_t,  float64_t,  float128_t,
-bool8_t,    bool16_t,   bool32_t,   bool64_t,
-char8_t,    char16_t,   char32_t,   string8_t,  string16_t, string32_t,
-fn,         val,        ref,        const_ref,  enum,
-struct,
-const,
-true,       false,
-if,         then,       elif,       else,       endif,
-for,        while,      repeat,     until,      
-break,      continue,   return,
-read,       print,      match,
-
+%codes 
+String,               Char,                 Integer,     
+Float32,              Float64,              Float80,     
+Float128,             Kw_byte,              Kw_unsigned,       
+Kw_uint8,             Kw_uint16,            Kw_uint32,
+Kw_uint64,            Kw_uint128,           Kw_long,     
+Kw_small,             Kw_read,              Kw_float,    
+Kw_float32,           Kw_float64,                 
+Kw_float128,          Kw_return,            Kw_endif,
+Kw_print,             Kw_exit,     
+Kw_for,               Kw_if,                    
+Kw_value,             Kw_else,           
+Kw_elif,              Kw_uses,              Kw_true,
+Kw_const,             Kw_bool,              Kw_bool8,    
+Kw_bool16,            Kw_bool32,            Kw_bool64,   
+Kw_false,             Kw_array,             Kw_module,         
+Kw_void,              Kw_var,
+Kw_enum,              Kw_repeat,            Kw_while,    
+Kw_as_long_as,        Kw_export,            Kw_case,   
+Kw_continue,          Kw_match,             Kw_char,           
+Kw_char8,             Kw_char16,            Kw_char32,
+Kw_ref,               Kw_string,            Kw_string8,  
+Kw_string16,          Kw_string32,          Kw_struct,   
+Kw_type,              Kw_then,                     
+Kw_function,          Kw_int,               Kw_int8,
+Kw_int16,             Kw_int32,             Kw_int64,    
+Kw_int128,            
 Comma,                  Semicolon,             
 Colon,                  Dot,                
 Open_round_bracket,     Closed_round_bracket,
@@ -71,60 +74,72 @@ Assign_to_field,        Label_prefix,
 Label_suffix,           Assign,
 Pattern_is,             Br_dots
 
+%idents {[:Letter:]|[:letter:]|_}{[:Letter:]|[:letter:]|_|[:digits:]}
 
-%impl_additions "
-#include <quadmath> 
-size_t digit2int(char32_t ch)
-{
-size_t v =  ch - U'0';
-return (v<=9)? v:(v&0b1101'1111) - 7;
-};
-__float128 myfirstscaner::build_float()
-{
-__float128 num;                                                                               
-num = int_value + fract_part*powq(10, num_of_digits);
-num = num*powq(10, sign_of_degree*exponent);
-return num;}"
-
-
-%keywords
-"module" : module,
-"import" : import,      "export" : export,
-"var" : var,
-"type" : type,
-"array" : array,
-"long" : long,              "short" : short,
-"int" : int,                "float" : float,            "uint" : uint,
-"bool" : bool,              "char" : char,              "string" : string,
-"void" : void,              "byte" : byte,
-"int8_t" : int8_t,          "int16_t" : int16_t,        "int32_t" : int32_t,
-"int64_t" : int64_t,        "int128_t" : int128_t,
-"uint8_t" : uint8_t,        "uint16_t" : uint16_t,      "uint32_t" : uint32_t,
-"uint64_t" : uint64_t,      "uint128_t" : uint128_t,
-"float32_t" : float32_t,    "float64_t" : float64_t,
-"float128_t" : float128_t,  
-"bool8_t" : bool8_t,        "bool16_t" : bool16_t,  
-"bool32_t" : bool32_t,      "bool64_t" : bool64_t,
-"char8_t" : char8_t,        "char16_t" : char16_t,      "char32_t" : char32_t,
-"string8_t" : string8_t,    "string16_t" : string16_t,  "string32_t" : string32_t,
-"fn" : fn,
-"val" : val,
-"ref" : ref,
-"const ref" : const_ref,
-"enum" : enum,
-"struct" : struct,
-"const" : const,
-"true" : true,              "false" : false,
-"if" : if,                  "then" : then,
-"elif" : elif,              "else" : else,
-"endif" : endif,
-"for" : for,                "while" : while,
-"repeat" : repeat,          "until" : until,
-"break" : break,            "continue" : continue,
-"return" : return,
-"read" : read,              "print" : print,
-"match" : match
-
+%keywords 
+"byte"       : Kw_byte,       
+"uint"         : Kw_unsigned,
+"uint_128"   : Kw_uint128,    
+"uint_16"       : Kw_uint16,
+"uint_32"    : Kw_uint32,     
+"uint_64"       : Kw_uint64,
+"uint_8"     : Kw_uint8,      
+"long"       : Kw_long,
+"read"       : Kw_read,       
+"float"           : Kw_float,
+"float_128"     : Kw_float128,   
+"float_32"         : Kw_float32,
+"float_64"      : Kw_float64,
+"return"    : Kw_return,     
+"endif"           : Kw_endif,
+"print"      : Kw_print,
+"break"      : Kw_exit,       
+"for"           : Kw_for,
+"if"       : Kw_if,
+"val"   : Kw_value, 
+"else"      : Kw_else,       
+"elif"          : Kw_elif,
+"import" : Kw_uses,       
+"true"        : Kw_true,
+"const"      : Kw_const,      
+"bool"           : Kw_bool,
+"bool_16"      : Kw_bool16,     
+"bool_32"         : Kw_bool32,
+"bool_64"      : Kw_bool64,     
+"bool_8"          : Kw_bool8,
+"false"       : Kw_false,      
+"short"     : Kw_small,
+"array"     : Kw_array,      
+"module"        : Kw_module,
+"void"      : Kw_void,
+"var"      : Kw_var,        
+"enum"  : Kw_enum,
+"repeat"   : Kw_repeat,     
+"while"          : Kw_while,
+"until"     : Kw_as_long_as, 
+"export" : Kw_export,      
+"case" : Kw_case,
+"continue"      : Kw_continue,
+"match"     : Kw_match,      
+"char"          : Kw_char,
+"char_16"     : Kw_char16,     
+"char_32"        : Kw_char32,
+"char_8"      : Kw_char8,      
+"ref"        : Kw_ref,
+"string"     : Kw_string,     
+"string_16"      : Kw_string16,
+"string_32"   : Kw_string32,   
+"string_8"       : Kw_string8,
+"struct"  : Kw_struct,     
+"type"           : Kw_type,
+"then"         : Kw_then,
+"fn"    : Kw_function,   
+"int"           : Kw_int,
+"int_8"       : Kw_int8,       
+"int_16"         : Kw_int16,
+"int_32"      : Kw_int32,      
+"int_64"         : Kw_int64,
+"int_128"     : Kw_int128
 
 %delimiters
 ","     : Comma,                ";"     : Semicolon,             
@@ -157,7 +172,6 @@ return num;}"
 ":>"    : Label_suffix,         ":="    : Assign,
 "->"    : Pattern_is,
 "{..}"  : Br_dots
-
 
 %impl_additions "
   #include <quadmath>
@@ -214,7 +228,6 @@ return num;}"
 0(x|X)[:xdigits:]$add_hex_digit_to_char_code('?[:xdigits:]$add_hex_digit_to_char_code)*)$write_by_code)+)*
 } 
 
-
 %numbers "int_val = 0;
           float_val = 0;
           is_float = false;
@@ -244,7 +257,7 @@ return num;}"
           %action setPrecision "precision = ch; is_float = true;"
 	                                
 {[:digits:]$addDecDigit('?[:digits:]$addDecDigit)*(.$setIsFloat[:digits:]$addDecToFrac('?[:digits:]$addDecToFrac*))
-?(((S|s)|(D|d)|(E|e)|(Q|q))$setPrecision+|-$setExpSign?[:digits:]$addDigitToDegree('?[:digits:]$addDigitToDegree)*)?|
+?(((S|s)|(D|d)|(E|e)|(Q|q))$setPrecision(\+|-)$setExpSign?[:digits:]$addDigitToDegree('?[:digits:]$addDigitToDegree)*)?|
 0o[:odigits:]$addOctDigit('?[:odigits:]$addOctDigit)*|
 0(b|B)[:bdigits:]$addBinDigit('?[:bdigits:]$addBinDigit)*|
 0(x|X)[:xdigits:]$addHexDigit('?[:xdigits:]$addHexDigit)*}
